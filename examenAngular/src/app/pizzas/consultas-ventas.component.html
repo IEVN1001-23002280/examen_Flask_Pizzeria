@@ -1,0 +1,116 @@
+<div class="border border-gray-400 bg-[#b0c4de] p-4 rounded-lg shadow-md flex flex-col gap-6">
+
+  <!-- Ventas del día -->
+  <div>
+    <h3 class="font-bold text-gray-800 mb-2">Ventas del día</h3>
+
+    <div class="bg-gray-400 border border-black p-4 rounded min-h-[150px] flex flex-col justify-center items-center space-y-3">
+      <div *ngIf="resultadoDia; else defaultDia" class="w-full text-center space-y-2">
+        <div *ngFor="let v of resultadoDia.ventas" class="text-xl font-bold text-black">
+          {{ v[1] }}  total  ${{ v[3] }}
+        </div>
+        <div *ngIf="resultadoDia.ventas.length === 0" class="text-lg font-bold text-black">
+          Sin ventas ese día
+        </div>
+        <div class="text-2xl font-extrabold text-black mt-4 border-t border-black pt-2">
+          Ventas totales del día: ${{ resultadoDia.total_dia }}
+        </div>
+      </div>
+      <ng-template #defaultDia>
+        <p class="text-lg font-bold text-black"></p>
+        <p class="text-lg font-bold text-black"></p>
+        <div class="text-xl font-extrabold text-black mt-4 border-t border-black pt-2"></div>
+      </ng-template>
+    </div>
+
+    <div class="mt-3 flex gap-2 items-center">
+      <select [(ngModel)]="diaSeleccionado" class="border px-2 py-1 rounded bg-white text-sm flex-1">
+        <option value="lunes">Lunes</option>
+        <option value="martes">Martes</option>
+        <option value="miercoles">Miércoles</option>
+        <option value="jueves">Jueves</option>
+        <option value="viernes">Viernes</option>
+        <option value="sabado">Sábado</option>
+        <option value="domingo">Domingo</option>
+      </select>
+      <button (click)="buscarPorDia()" class="bg-gray-300 hover:bg-gray-400 text-black border border-gray-600 py-1 px-4 rounded font-semibold shadow text-sm whitespace-nowrap">
+        Ventas totales por dia
+      </button>
+    </div>
+  </div>
+
+  <!-- Ventas del mes -->
+  <div>
+    <h3 class="font-bold text-gray-800 mb-2">Ventas del mes</h3>
+
+    <div class="bg-gray-400 border border-black p-4 rounded min-h-[150px] flex flex-col justify-center items-center space-y-3">
+      <div *ngIf="resultadoMes; else defaultMes" class="w-full text-center space-y-2">
+        <div *ngFor="let v of resultadoMes.ventas" class="text-xl font-bold text-black">
+          {{ v[1] }}  total  ${{ v[3] }}
+        </div>
+        <div *ngIf="resultadoMes.ventas.length === 0" class="text-lg font-bold text-black">
+          Sin ventas ese mes
+        </div>
+        <div class="text-2xl font-extrabold text-black mt-4 border-t border-black pt-2">
+          Ventas totales del mes: ${{ resultadoMes.total_mes }}
+        </div>
+      </div>
+      <ng-template #defaultMes>
+        <p class="text-lg font-bold text-black"></p>
+        <p class="text-lg font-bold text-black"></p>
+        <div class="text-xl font-extrabold text-black mt-4 border-t border-black pt-2"></div>
+      </ng-template>
+    </div>
+
+    <div class="mt-3 flex gap-2 items-center">
+      <select [(ngModel)]="mesSeleccionado" class="border px-2 py-1 rounded bg-white text-sm flex-1">
+        <option value="enero">Enero</option>
+        <option value="febrero">Febrero</option>
+        <option value="marzo">Marzo</option>
+        <option value="abril">Abril</option>
+        <option value="mayo">Mayo</option>
+        <option value="junio">Junio</option>
+        <option value="julio">Julio</option>
+        <option value="agosto">Agosto</option>
+        <option value="septiembre">Septiembre</option>
+        <option value="octubre">Octubre</option>
+        <option value="noviembre">Noviembre</option>
+        <option value="diciembre">Diciembre</option>
+      </select>
+      <button (click)="buscarPorMes()" class="bg-gray-300 hover:bg-gray-400 text-black border border-gray-600 py-1 px-4 rounded font-semibold shadow text-sm whitespace-nowrap">
+        Ventas totales por mes
+      </button>
+    </div>
+  </div>
+
+  <!-- Detalle de una venta -->
+  <div *ngIf="detalleVenta">
+    <h3 class="font-bold text-gray-800 mb-2">Detalle del pedido #{{ idpedidoSeleccionado }}</h3>
+    <div class="bg-gray-400 border border-black p-4 rounded text-sm">
+      <div class="flex justify-end">
+        <button (click)="detalleVenta = null" class="text-red-700 font-bold text-xs">Cerrar ✕</button>
+      </div>
+      <p class="text-black"><b>Cliente:</b> {{ detalleVenta.pedido[0] }} — {{ detalleVenta.pedido[1] }} — {{ detalleVenta.pedido[2] }}</p>
+      <p class="text-black"><b>Fecha:</b> {{ detalleVenta.pedido[3] }} &nbsp; <b>Total:</b> ${{ detalleVenta.pedido[4] }}</p>
+      <table class="w-full mt-2 border-collapse text-xs bg-white">
+        <thead>
+          <tr class="bg-gray-300">
+            <th class="border px-2 py-1">Tamaño</th>
+            <th class="border px-2 py-1">Ingredientes</th>
+            <th class="border px-2 py-1">Num. Pizzas</th>
+            <th class="border px-2 py-1">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of detalleVenta.pizzas">
+            <td class="border px-2 py-1">{{ p[0] }}</td>
+            <td class="border px-2 py-1">{{ p[1] }}</td>
+            <td class="border px-2 py-1">{{ p[2] }}</td>
+            <td class="border px-2 py-1">${{ p[3] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
